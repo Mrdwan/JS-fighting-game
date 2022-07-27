@@ -55,6 +55,14 @@ const player = new Fighter({
             imageSrc: './img/samuraiMack/Run.png',
             framesMax: 8,
         },
+        jump: {
+            imageSrc: './img/samuraiMack/Jump.png',
+            framesMax: 2,
+        },
+        fall: {
+            imageSrc: './img/samuraiMack/Fall.png',
+            framesMax: 2,
+        },
     },
 })
 
@@ -105,13 +113,20 @@ function animate() {
     enemy.velocity.x = 0
 
     // player movement
-    player.image = player.sprites.idle.image
     if (keys.a.pressed && player.lastKey === 'a') {
         player.velocity.x = -5
-        player.image = player.sprites.run.image
+        player.switchSprites('run')
     } else if (keys.d.pressed && player.lastKey === 'd') {
         player.velocity.x = 5
-        player.image = player.sprites.run.image
+        player.switchSprites('run')
+    } else {
+        player.switchSprites('idle')
+    }
+
+    if (player.velocity.y < 0) {
+        player.switchSprites('jump')
+    } else if (player.velocity.y > 0) {
+        player.switchSprites('fall')
     }
 
     // enemey movement
@@ -167,7 +182,7 @@ window.addEventListener('keydown', function (event) {
             player.lastKey = 'a'
             break
         case 'w':
-            player.velocity.y = -10
+            player.velocity.y = -20
             break
         case 'ArrowRight':
             keys.ArrowRight.pressed = true
@@ -178,7 +193,7 @@ window.addEventListener('keydown', function (event) {
             enemy.lastKey = 'ArrowLeft'
             break
         case 'ArrowUp':
-            enemy.velocity.y = -10
+            enemy.velocity.y = -20
             break
         case ' ':
             player.attack()
