@@ -68,6 +68,14 @@ const player = new Fighter({
             framesMax: 6,
         },
     },
+    attackBox: {
+        offset: {
+            x: 100,
+            y: 50,
+        },
+        width: 160,
+        height: 50,
+    },
 })
 
 const enemy = new Fighter({
@@ -112,6 +120,14 @@ const enemy = new Fighter({
             imageSrc: './img/kenji/Attack1.png',
             framesMax: 4,
         },
+    },
+    attackBox: {
+        offset: {
+            x: -172,
+            y: 50,
+        },
+        width: 172,
+        height: 50,
     },
 })
 
@@ -181,35 +197,43 @@ function animate() {
 
     // detect for collision
     if (
-        (rectanularCollision({
+        rectanularCollision({
             rectangle1: player,
             rectangle2: enemy,
-        }),
-        player.isAttacking)
+        }) &&
+        player.isAttacking &&
+        player.framesCurrent === 4
     ) {
         player.isAttacking = false
         enemy.health -= 20
         document.getElementById('enemyHealth').style.width = enemy.health + '%'
-        console.log('player attacked')
     }
 
     if (
-        (rectanularCollision({
+        rectanularCollision({
             rectangle1: enemy,
             rectangle2: player,
-        }),
-        enemy.isAttacking)
+        }) &&
+        enemy.isAttacking &&
+        enemy.framesCurrent === 2
     ) {
         enemy.isAttacking = false
         player.health -= 20
         document.getElementById('playerHealth').style.width =
             player.health + '%'
-        console.log('enemy attacked')
     }
 
     // end game based on health
     if (enemy.health <= 0 || player.health <= 0) {
         determineWinner({ player, enemy, timerId })
+    }
+
+    // if player misses
+    if (player.isAttacking && player.framesCurrent === 4) {
+        player.isAttacking = false
+    }
+    if (enemy.isAttacking && enemy.framesCurrent === 2) {
+        enemy.isAttacking = false
     }
 }
 animate()
