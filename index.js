@@ -63,6 +63,10 @@ const player = new Fighter({
             imageSrc: './img/samuraiMack/Fall.png',
             framesMax: 2,
         },
+        attack1: {
+            imageSrc: './img/samuraiMack/Attack1.png',
+            framesMax: 6,
+        },
     },
 })
 
@@ -144,6 +148,7 @@ function animate() {
         }),
         player.isAttacking)
     ) {
+        player.switchSprites('attack1')
         player.isAttacking = false
         enemy.health -= 20
         document.getElementById('enemyHealth').style.width = enemy.health + '%'
