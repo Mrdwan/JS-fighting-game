@@ -28,7 +28,7 @@ const shop = new Sprite({
 
 const player = new Fighter({
     position: {
-        x: 0,
+        x: 100,
         y: 200,
     },
     velocity: {
@@ -88,7 +88,7 @@ const player = new Fighter({
 
 const enemy = new Fighter({
     position: {
-        x: 200,
+        x: canvas.width - 150,
         y: 0,
     },
     velocity: {
@@ -171,6 +171,8 @@ function animate() {
     c.fillRect(0, 0, canvas.width, canvas.height)
     background.update()
     shop.update()
+    c.fillStyle = 'rgba(255, 255, 255, 0.15)'
+    c.fillRect(0, 0, canvas.width, canvas.height)
     player.update()
     enemy.update()
 
@@ -222,7 +224,9 @@ function animate() {
     ) {
         enemy.takeHit()
         player.isAttacking = false
-        document.getElementById('enemyHealth').style.width = enemy.health + '%'
+        gsap.to('#enemyHealth', {
+            width: enemy.health + '%',
+        })
     }
 
     if (
@@ -235,8 +239,9 @@ function animate() {
     ) {
         player.takeHit()
         enemy.isAttacking = false
-        document.getElementById('playerHealth').style.width =
-            player.health + '%'
+        gsap.to('#playerHealth', {
+            width: player.health + '%',
+        })
     }
 
     // end game based on health
